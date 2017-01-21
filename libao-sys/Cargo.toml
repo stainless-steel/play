@@ -2,3 +2,5 @@
 name = "libao-sys"
 version = "0.0.1"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
+build = "build.rs"
+links = "ao"
