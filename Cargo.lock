@@ -2,15 +2,15 @@
 name = "play"
 version = "0.0.1"
 dependencies = [
- "ao 0.0.1",
- "mpg123 0.0.1",
+ "ao-sys 0.0.1",
+ "mpg123-sys 0.0.1",
 ]
 
 [[package]]
-name = "ao"
+name = "ao-sys"
 version = "0.0.1"
 
 [[package]]
-name = "mpg123"
+name = "mpg123-sys"
 version = "0.0.1"
 
