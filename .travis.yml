@@ -1,0 +1,14 @@
+language: rust
+sudo: false
+
+os:
+  - linux
+  - osx
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+notifications:
+  email: false
