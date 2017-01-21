@@ -1,6 +1,6 @@
-[submodule "ao-sys/source"]
-	path = ao-sys/source
-	url = https://git.xiph.org/libao.git
+[submodule "libao-sys/source"]
+	path = libao-sys/source
+	url = https://github.com/copies/libao.git
 [submodule "mpg123-sys/source"]
 	path = mpg123-sys/source
 	url = https://github.com/copies/mpg123.git
