@@ -1,4 +1,16 @@
 [root]
 name = "play"
 version = "0.0.1"
+dependencies = [
+ "ao 0.0.1",
+ "mpg123 0.0.1",
+]
+
+[[package]]
+name = "ao"
+version = "0.0.1"
+
+[[package]]
+name = "mpg123"
+version = "0.0.1"
 

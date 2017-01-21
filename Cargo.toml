@@ -6,3 +6,7 @@ authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "A tool for playing audio files."
 homepage = "https://github.com/IvanUkhov/play"
 repository = "https://github.com/IvanUkhov/play"
+
+[dependencies]
+ao = { path = "ao" }
+mpg123 = { path = "mpg123" }

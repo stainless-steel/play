@@ -1,0 +1,4 @@
+[package]
+name = "mpg123"
+version = "0.0.1"
+authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
