@@ -244,7 +244,7 @@ pub enum mpg123_param_flags {
     MPG123_NO_RESYNC = 0x80,
     MPG123_SEEKBUFFER = 0x100,
     MPG123_FUZZY = 0x200,
-    MPG123_FORCE_FLOAT  = 0x400,
+    MPG123_FORCE_FLOAT = 0x400,
     MPG123_PLAIN_ID3TEXT = 0x800,
     MPG123_IGNORE_STREAMLENGTH = 0x1000,
     MPG123_SKIP_ID3V2 = 0x2000,
@@ -337,8 +337,16 @@ extern {
     pub fn mpg123_exit();
     pub fn mpg123_new(decoder: *const c_char, error: *mut c_int) -> *mut mpg123_handle;
     pub fn mpg123_delete(mh: *mut mpg123_handle);
-    pub fn mpg123_param(mh: *mut mpg123_handle, _type: mpg123_parms, value: c_long, fvalue: c_double) -> c_int;
-    pub fn mpg123_getparam(mh: *mut mpg123_handle, _type: mpg123_parms, value: *mut c_long, fvalue: *mut c_double) -> c_int;
+    pub fn mpg123_param(mh: *mut mpg123_handle,
+                        _type: mpg123_parms,
+                        value: c_long,
+                        fvalue: c_double)
+                        -> c_int;
+    pub fn mpg123_getparam(mh: *mut mpg123_handle,
+                           _type: mpg123_parms,
+                           value: *mut c_long,
+                           fvalue: *mut c_double)
+                           -> c_int;
     pub fn mpg123_feature(key: mpg123_feature_set) -> c_int;
     pub fn mpg123_plain_strerror(errcode: c_int) -> *const c_char;
     pub fn mpg123_strerror(mh: *mut mpg123_handle) -> *const c_char;
@@ -352,38 +360,95 @@ extern {
     pub fn mpg123_encsize(encoding: c_int) -> c_int;
     pub fn mpg123_format_none(mh: *mut mpg123_handle) -> c_int;
     pub fn mpg123_format_all(mh: *mut mpg123_handle) -> c_int;
-    pub fn mpg123_format(mh: *mut mpg123_handle, rate: c_long, channels: c_int, encodings: c_int) -> c_int;
+    pub fn mpg123_format(mh: *mut mpg123_handle,
+                         rate: c_long,
+                         channels: c_int,
+                         encodings: c_int)
+                         -> c_int;
     pub fn mpg123_format_support(mh: *mut mpg123_handle, rate: c_long, encoding: c_int) -> c_int;
-    pub fn mpg123_getformat(mh: *mut mpg123_handle, rate: *mut c_long, channels: *mut c_int, encoding: *mut c_int) -> c_int;
+    pub fn mpg123_getformat(mh: *mut mpg123_handle,
+                            rate: *mut c_long,
+                            channels: *mut c_int,
+                            encoding: *mut c_int)
+                            -> c_int;
     pub fn mpg123_open(mh: *mut mpg123_handle, path: *const c_char) -> c_int;
     pub fn mpg123_open_fd(mh: *mut mpg123_handle, fd: c_int) -> c_int;
     pub fn mpg123_open_handle(mh: *mut mpg123_handle, iohandle: *mut c_void) -> c_int;
     pub fn mpg123_open_feed(mh: *mut mpg123_handle) -> c_int;
     pub fn mpg123_close(mh: *mut mpg123_handle) -> c_int;
-    pub fn mpg123_read(mh: *mut mpg123_handle, outmemory: *mut c_uchar, outmemsize: size_t, done: *mut size_t) -> c_int;
+    pub fn mpg123_read(mh: *mut mpg123_handle,
+                       outmemory: *mut c_uchar,
+                       outmemsize: size_t,
+                       done: *mut size_t)
+                       -> c_int;
     pub fn mpg123_feed(mh: *mut mpg123_handle, _in: *const c_uchar, size: size_t) -> c_int;
-    pub fn mpg123_decode(mh: *mut mpg123_handle, inmemory: *const c_uchar, inmemsize: size_t, outmemory: *mut c_uchar, outmemsize: size_t, done: *mut size_t) -> c_int;
-    pub fn mpg123_decode_frame(mh: *mut mpg123_handle, num: *mut off_t, audio: *mut *mut c_uchar, bytes: *mut size_t) -> c_int;
-    pub fn mpg123_framebyframe_decode(mh: *mut mpg123_handle, num: *mut off_t, audio: *mut *mut c_uchar, bytes: *mut size_t) -> c_int;
+    pub fn mpg123_decode(mh: *mut mpg123_handle,
+                         inmemory: *const c_uchar,
+                         inmemsize: size_t,
+                         outmemory: *mut c_uchar,
+                         outmemsize: size_t,
+                         done: *mut size_t)
+                         -> c_int;
+    pub fn mpg123_decode_frame(mh: *mut mpg123_handle,
+                               num: *mut off_t,
+                               audio: *mut *mut c_uchar,
+                               bytes: *mut size_t)
+                               -> c_int;
+    pub fn mpg123_framebyframe_decode(mh: *mut mpg123_handle,
+                                      num: *mut off_t,
+                                      audio: *mut *mut c_uchar,
+                                      bytes: *mut size_t)
+                                      -> c_int;
     pub fn mpg123_framebyframe_next(mh: *mut mpg123_handle) -> c_int;
-    pub fn mpg123_framedata(mh: *mut mpg123_handle, header: *mut c_ulong, bodydata: *mut *mut c_uchar, bodybytes: *mut size_t) -> c_int;
+    pub fn mpg123_framedata(mh: *mut mpg123_handle,
+                            header: *mut c_ulong,
+                            bodydata: *mut *mut c_uchar,
+                            bodybytes: *mut size_t)
+                            -> c_int;
     pub fn mpg123_framepos(mh: *mut mpg123_handle) -> off_t;
     pub fn mpg123_tell(mh: *mut mpg123_handle) -> off_t;
     pub fn mpg123_tellframe(mh: *mut mpg123_handle) -> off_t;
     pub fn mpg123_tell_stream(mh: *mut mpg123_handle) -> off_t;
     pub fn mpg123_seek(mh: *mut mpg123_handle, sampleoff: off_t, whence: c_int) -> off_t;
-    pub fn mpg123_feedseek(mh: *mut mpg123_handle, sampleoff: off_t, whence: c_int, input_offset: *mut off_t) -> off_t;
+    pub fn mpg123_feedseek(mh: *mut mpg123_handle,
+                           sampleoff: off_t,
+                           whence: c_int,
+                           input_offset: *mut off_t)
+                           -> off_t;
     pub fn mpg123_seek_frame(mh: *mut mpg123_handle, frameoff: off_t, whence: c_int) -> off_t;
     pub fn mpg123_timeframe(mh: *mut mpg123_handle, sec: c_double) -> off_t;
-    pub fn mpg123_index(mh: *mut mpg123_handle, offsets: *mut *mut off_t, step: *mut off_t, fill: *mut size_t) -> c_int;
-    pub fn mpg123_set_index(mh: *mut mpg123_handle, offsets: *mut off_t, step: off_t, fill: size_t) -> c_int;
-    pub fn mpg123_position(mh: *mut mpg123_handle, frame_offset: off_t, buffered_bytes: off_t, current_frame: *mut off_t, frames_left: *mut off_t, current_seconds: *mut c_double, seconds_left: *mut c_double) -> c_int;
-    pub fn mpg123_eq(mh: *mut mpg123_handle, channel: mpg123_channels, band: c_int, val: c_double) -> c_int;
+    pub fn mpg123_index(mh: *mut mpg123_handle,
+                        offsets: *mut *mut off_t,
+                        step: *mut off_t,
+                        fill: *mut size_t)
+                        -> c_int;
+    pub fn mpg123_set_index(mh: *mut mpg123_handle,
+                            offsets: *mut off_t,
+                            step: off_t,
+                            fill: size_t)
+                            -> c_int;
+    pub fn mpg123_position(mh: *mut mpg123_handle,
+                           frame_offset: off_t,
+                           buffered_bytes: off_t,
+                           current_frame: *mut off_t,
+                           frames_left: *mut off_t,
+                           current_seconds: *mut c_double,
+                           seconds_left: *mut c_double)
+                           -> c_int;
+    pub fn mpg123_eq(mh: *mut mpg123_handle,
+                     channel: mpg123_channels,
+                     band: c_int,
+                     val: c_double)
+                     -> c_int;
     pub fn mpg123_geteq(mh: *mut mpg123_handle, channel: mpg123_channels, band: c_int) -> c_double;
     pub fn mpg123_reset_eq(mh: *mut mpg123_handle) -> c_int;
     pub fn mpg123_volume(mh: *mut mpg123_handle, vol: c_double) -> c_int;
     pub fn mpg123_volume_change(mh: *mut mpg123_handle, change: c_double) -> c_int;
-    pub fn mpg123_getvolume(mh: *mut mpg123_handle, base: *mut c_double, really: *mut c_double, rva_db: *mut c_double) -> c_int;
+    pub fn mpg123_getvolume(mh: *mut mpg123_handle,
+                            base: *mut c_double,
+                            really: *mut c_double,
+                            rva_db: *mut c_double)
+                            -> c_int;
     pub fn mpg123_info(mh: *mut mpg123_handle, mi: *mut mpg123_frameinfo) -> c_int;
     pub fn mpg123_safe_buffer() -> size_t;
     pub fn mpg123_scan(mh: *mut mpg123_handle) -> c_int;
@@ -393,44 +458,81 @@ extern {
     pub fn mpg123_tpf(mh: *mut mpg123_handle) -> c_double;
     pub fn mpg123_spf(mh: *mut mpg123_handle) -> c_int;
     pub fn mpg123_clip(mh: *mut mpg123_handle) -> c_long;
-    pub fn mpg123_getstate(mh: *mut mpg123_handle, key: mpg123_state, val: *mut c_long, fval: *mut c_double) -> c_int;
+    pub fn mpg123_getstate(mh: *mut mpg123_handle,
+                           key: mpg123_state,
+                           val: *mut c_long,
+                           fval: *mut c_double)
+                           -> c_int;
     pub fn mpg123_init_string(sb: *mut mpg123_string);
     pub fn mpg123_free_string(sb: *mut mpg123_string);
     pub fn mpg123_resize_string(sb: *mut mpg123_string, news: size_t) -> c_int;
     pub fn mpg123_grow_string(sb: *mut mpg123_string, news: size_t) -> c_int;
     pub fn mpg123_copy_string(from: *mut mpg123_string, to: *mut mpg123_string) -> c_int;
     pub fn mpg123_add_string(sb: *mut mpg123_string, stuff: *const c_char) -> c_int;
-    pub fn mpg123_add_substring(sb: *mut mpg123_string, stuff: *const c_char, from: size_t, count: size_t) -> c_int;
+    pub fn mpg123_add_substring(sb: *mut mpg123_string,
+                                stuff: *const c_char,
+                                from: size_t,
+                                count: size_t)
+                                -> c_int;
     pub fn mpg123_set_string(sb: *mut mpg123_string, stuff: *const c_char) -> c_int;
-    pub fn mpg123_set_substring(sb: *mut mpg123_string, stuff: *const c_char, from: size_t, count: size_t) -> c_int;
+    pub fn mpg123_set_substring(sb: *mut mpg123_string,
+                                stuff: *const c_char,
+                                from: size_t,
+                                count: size_t)
+                                -> c_int;
     pub fn mpg123_strlen(sb: *mut mpg123_string, utf8: c_int) -> size_t;
     pub fn mpg123_chomp_string(sb: *mut mpg123_string) -> c_int;
     pub fn mpg123_enc_from_id3(id3_enc_byte: c_uchar) -> mpg123_text_encoding;
-    pub fn mpg123_store_utf8(sb: *mut mpg123_string, enc: mpg123_text_encoding, source: *const c_uchar, source_size: size_t) -> c_int;
+    pub fn mpg123_store_utf8(sb: *mut mpg123_string,
+                             enc: mpg123_text_encoding,
+                             source: *const c_uchar,
+                             source_size: size_t)
+                             -> c_int;
     pub fn mpg123_meta_check(mh: *mut mpg123_handle) -> c_int;
     pub fn mpg123_meta_free(mh: *mut mpg123_handle);
-    pub fn mpg123_id3(mh: *mut mpg123_handle, v1: *mut *mut mpg123_id3v1, v2: *mut *mut mpg123_id3v2) -> c_int;
+    pub fn mpg123_id3(mh: *mut mpg123_handle,
+                      v1: *mut *mut mpg123_id3v1,
+                      v2: *mut *mut mpg123_id3v2)
+                      -> c_int;
     pub fn mpg123_icy(mh: *mut mpg123_handle, icy_meta: *mut *mut c_char) -> c_int;
     pub fn mpg123_icy2utf8(icy_text: *const c_char) -> *mut c_char;
-    pub fn mpg123_parnew(mp: *mut mpg123_pars, decoder: *const c_char, error: *mut c_int) -> *mut mpg123_handle;
+    pub fn mpg123_parnew(mp: *mut mpg123_pars,
+                         decoder: *const c_char,
+                         error: *mut c_int)
+                         -> *mut mpg123_handle;
     pub fn mpg123_new_pars(error: *mut c_int) -> *mut mpg123_pars;
     pub fn mpg123_delete_pars(mp: *mut mpg123_pars);
     pub fn mpg123_fmt_none(mp: *mut mpg123_pars) -> c_int;
     pub fn mpg123_fmt_all(mp: *mut mpg123_pars) -> c_int;
-    pub fn mpg123_fmt(mp: *mut mpg123_pars, rate: c_long, channels: c_int, encodings: c_int) -> c_int;
+    pub fn mpg123_fmt(mp: *mut mpg123_pars,
+                      rate: c_long,
+                      channels: c_int,
+                      encodings: c_int)
+                      -> c_int;
     pub fn mpg123_fmt_support(mp: *mut mpg123_pars, rate: c_long, encoding: c_int) -> c_int;
-    pub fn mpg123_par(mp: *mut mpg123_pars, _type: mpg123_parms, value: c_long, fvalue: c_double) -> c_int;
-    pub fn mpg123_getpar(mp: *mut mpg123_pars, _type: mpg123_parms, value: *mut c_long, fvalue: *mut c_double) -> c_int;
-    pub fn mpg123_replace_buffer(mh: *mut mpg123_handle, data: *mut c_uchar, size: size_t) -> c_int;
+    pub fn mpg123_par(mp: *mut mpg123_pars,
+                      _type: mpg123_parms,
+                      value: c_long,
+                      fvalue: c_double)
+                      -> c_int;
+    pub fn mpg123_getpar(mp: *mut mpg123_pars,
+                         _type: mpg123_parms,
+                         value: *mut c_long,
+                         fvalue: *mut c_double)
+                         -> c_int;
+    pub fn mpg123_replace_buffer(mh: *mut mpg123_handle,
+                                 data: *mut c_uchar,
+                                 size: size_t)
+                                 -> c_int;
     pub fn mpg123_outblock(mh: *mut mpg123_handle) -> size_t;
-
     pub fn mpg123_replace_reader(mh: *mut mpg123_handle,
                                  r_read: unsafe extern fn(c_int, *mut c_void, size_t) -> ssize_t,
                                  r_lseek: unsafe extern fn(c_int, off_t, c_int) -> off_t)
                                  -> c_int;
-
     pub fn mpg123_replace_reader_handle(mh: *mut mpg123_handle,
-                                        r_read: unsafe extern fn(*mut c_void, *mut c_void, size_t)
+                                        r_read: unsafe extern fn(*mut c_void,
+                                                                 *mut c_void,
+                                                                 size_t)
                                                                  -> ssize_t,
                                         r_lseek: unsafe extern fn(*mut c_void, off_t, c_int)
                                                                   -> off_t,
