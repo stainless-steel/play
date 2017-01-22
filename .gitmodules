@@ -1,3 +1,0 @@
-[submodule "libao-sys/source"]
-	path = libao-sys/source
-	url = https://github.com/copies/libao.git

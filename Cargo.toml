@@ -8,7 +8,5 @@ homepage = "https://github.com/IvanUkhov/play"
 repository = "https://github.com/IvanUkhov/play"
 
 [dependencies]
-libao-sys = { path = "libao-sys" }
-mpg123-sys = "0.0.1"
-
-[workspace]
+ao-sys = "0.0"
+mpg123-sys = "0.0"
