@@ -20,5 +20,8 @@ install:
       ./configure && make && sudo make install && cd -;
     fi
 
+script:
+  - cargo build --verbose
+
 notifications:
   email: false
