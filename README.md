@@ -8,7 +8,7 @@ Your contribution is highly appreciated. Do not hesitate to open an issue or a
 pull request. Note that any contribution submitted for inclusion in the project
 will be licensed according to the terms given in [LICENSE.md](LICENSE.md).
 
-[status-img]: https://travis-ci.org/IvanUkhov/play.svg?branch=master
-[status-url]: https://travis-ci.org/IvanUkhov/play
+[status-img]: https://travis-ci.org/stainless-steel/play.svg?branch=master
+[status-url]: https://travis-ci.org/stainless-steel/play
 [version-img]: https://img.shields.io/crates/v/play.svg
 [version-url]: https://crates.io/crates/play

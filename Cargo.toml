@@ -4,8 +4,8 @@ version = "0.0.2"
 license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "The package provides a mean of playing audio files."
-homepage = "https://github.com/IvanUkhov/play"
-repository = "https://github.com/IvanUkhov/play"
+homepage = "https://github.com/stainless-steel/play"
+repository = "https://github.com/stainless-steel/play"
 
 [dependencies]
 ao-sys = "0.0"
