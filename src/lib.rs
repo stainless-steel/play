@@ -1,4 +1,10 @@
 //! Means of playing audio files.
+//!
+//! # Example
+//!
+//! ```
+//! play::play("tests/fixtures/sound.mp3");
+//! ```
 
 // The implementation is based on
 // http://hzqtc.github.io/2012/05/play-mp3-with-libmpg123-and-libao.html
@@ -85,12 +91,4 @@ pub fn play<T: AsRef<Path>>(path: T) -> Result<(), &'static str> {
         mpg123::mpg123_exit();
     }
     Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn play() {
-        ::play("tests/fixtures/sound.mp3").unwrap();
-    }
 }

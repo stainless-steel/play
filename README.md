@@ -2,6 +2,12 @@
 
 The package provides a mean of playing audio files.
 
+## Example
+
+```rust
+play::play("tests/fixtures/sound.mp3");
+```
+
 ## Contribution
 
 Your contribution is highly appreciated. Do not hesitate to open an issue or a
