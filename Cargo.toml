@@ -3,7 +3,7 @@ name = "play"
 version = "0.0.1"
 license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
-description = "A tool for playing audio files."
+description = "The package provides a mean of playing audio files."
 homepage = "https://github.com/IvanUkhov/play"
 repository = "https://github.com/IvanUkhov/play"
 

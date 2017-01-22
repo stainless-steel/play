@@ -1,6 +1,6 @@
 # Play [![Version][version-img]][version-url] [![Status][status-img]][status-url]
 
-A tool for playing audio files.
+The package provides a mean of playing audio files.
 
 ## Contribution
 

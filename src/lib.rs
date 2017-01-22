@@ -1,4 +1,4 @@
-//! Tool for playing audio files.
+//! Means of playing audio files.
 
 // The implementation is based on
 // http://hzqtc.github.io/2012/05/play-mp3-with-libmpg123-and-libao.html
