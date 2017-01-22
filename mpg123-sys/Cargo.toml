@@ -5,5 +5,8 @@ authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 build = "build.rs"
 links = "mpg123"
 
+[dependencies]
+libc = "0.2"
+
 [build-dependencies]
 pkg-config = "0.3"
