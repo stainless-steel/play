@@ -7,7 +7,7 @@ The package provides a mean of playing audio files.
 ## Example
 
 ```rust
-play::play("tests/fixtures/sound.mp3");
+play::play("tests/fixtures/sound.mp3").unwrap();
 ```
 
 ## Contribution

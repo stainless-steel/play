@@ -3,25 +3,20 @@
 //! # Example
 //!
 //! ```
-//! play::play("tests/fixtures/sound.mp3");
+//! play::play("tests/fixtures/sound.mp3").unwrap();
 //! ```
 
-// The implementation is based on
-// http://hzqtc.github.io/2012/05/play-mp3-with-libmpg123-and-libao.html
-
-extern crate ao_sys as ao;
 extern crate libc;
 extern crate mpg123_sys as mpg123;
+extern crate out123_sys as out123;
 
-use libc::{c_int, c_long, uint32_t};
+use libc::c_int;
 
 use std::ffi::CString;
 use std::path::Path;
 use std::ptr;
 
-macro_rules! raise(
-    ($message:expr) => (return Err($message));
-);
+macro_rules! raise(($message:expr) => (return Err($message)));
 
 /// Play an audio file.
 pub fn play<T: AsRef<Path>>(path: T) -> Result<(), &'static str> {
@@ -37,58 +32,75 @@ pub fn play<T: AsRef<Path>>(path: T) -> Result<(), &'static str> {
         _ => raise!("the path is malformed"),
     };
     unsafe {
-        mpg123::mpg123_init();
-        let mut error: c_int = 0;
-        let handle = mpg123::mpg123_new(ptr::null(), &mut error);
+        let mut error = mpg123::mpg123_init();
         if error != mpg123::MPG123_OK as c_int {
-            raise!("something went wrong");
+            raise!("failed to initialize mpg123");
         }
-        error = mpg123::mpg123_open(handle, path.as_ptr());
+        let mpg123_handle;
+        let mut out123_handle = ptr::null_mut();
+        let mut buffer = ptr::null_mut();
+        macro_rules! cleanup(
+            () => ({
+                if !buffer.is_null() {
+                    libc::free(buffer as *mut _);
+                }
+                if !out123_handle.is_null() {
+                    out123::out123_del(out123_handle);
+                }
+                if !mpg123_handle.is_null() {
+                    mpg123::mpg123_close(mpg123_handle);
+                    mpg123::mpg123_delete(mpg123_handle);
+                }
+                mpg123::mpg123_exit();
+            });
+        );
+        macro_rules! cleanup_and_raise(
+            ($message:expr) => ({
+                cleanup!();
+                raise!($message);
+            });
+        );
+        mpg123_handle = mpg123::mpg123_new(ptr::null(), &mut error);
+        if mpg123_handle.is_null() || error != mpg123::MPG123_OK as c_int {
+            cleanup_and_raise!("failed to instantiate mpg123");
+        }
+        error = mpg123::mpg123_open(mpg123_handle, path.as_ptr());
         if error != mpg123::MPG123_OK as c_int {
-            mpg123::mpg123_delete(handle);
-            mpg123::mpg123_exit();
-            raise!("failed to open the file");
+            cleanup_and_raise!("failed to open the input");
         }
-        let mut rate: c_long = 0;
-        let mut channels: c_int = 0;
-        let mut encoding: c_int = 0;
-        error = mpg123::mpg123_getformat(handle, &mut rate, &mut channels, &mut encoding);
+        let mut rate = 0;
+        let mut channels = 0;
+        let mut encoding = 0;
+        error = mpg123::mpg123_getformat(mpg123_handle, &mut rate, &mut channels, &mut encoding);
         if error != mpg123::MPG123_OK as c_int {
-            mpg123::mpg123_close(handle);
-            mpg123::mpg123_delete(handle);
-            mpg123::mpg123_exit();
-            raise!("failed to get the format");
+            cleanup_and_raise!("failed to get the format");
         }
-
-        ao::ao_initialize();
-        let mut format = ao::ao_sample_format {
-            bits: 8 * mpg123::mpg123_encsize(encoding),
-            rate: rate as c_int,
-            channels: channels,
-            byte_format: ao::AO_FMT_NATIVE,
-            matrix: ptr::null_mut(),
-        };
-        let driver = ao::ao_default_driver_id();
-        let device = ao::ao_open_live(driver, &mut format, ptr::null_mut());
-
-        let buffer_size = mpg123::mpg123_outblock(handle);
-        let buffer = libc::malloc(8 * buffer_size) as *mut _;
-        let mut done = 0;
+        out123_handle = out123::out123_new();
+        if out123_handle.is_null() {
+            cleanup_and_raise!("failed to instantiate out123");
+        }
+        error = out123::out123_open(out123_handle, ptr::null(), ptr::null());
+        if error != out123::OUT123_OK as c_int {
+            cleanup_and_raise!("failed to open the output");
+        }
+        error = out123::out123_start(out123_handle, rate, channels, encoding);
+        if error != out123::OUT123_OK as c_int {
+            cleanup_and_raise!("failed to start the output");
+        }
+        let buffer_size = mpg123::mpg123_outblock(mpg123_handle);
+        buffer = libc::malloc(8 * buffer_size) as *mut _;
         loop {
-            error = mpg123::mpg123_read(handle, buffer, buffer_size, &mut done);
-            if error != mpg123::MPG123_OK as c_int {
+            let mut written = 0;
+            error = mpg123::mpg123_read(mpg123_handle, buffer, buffer_size, &mut written);
+            if written == 0 || error != mpg123::MPG123_OK as c_int {
                 break;
             }
-            ao::ao_play(device, buffer as *mut _, done as uint32_t);
+            let played = out123::out123_play(out123_handle, buffer as *mut _, written);
+            if played != written {
+                cleanup_and_raise!("failed to play the output");
+            }
         }
-        libc::free(buffer as *mut _);
-
-        ao::ao_close(device);
-        ao::ao_shutdown();
-
-        mpg123::mpg123_close(handle);
-        mpg123::mpg123_delete(handle);
-        mpg123::mpg123_exit();
+        cleanup!();
     }
     Ok(())
 }
