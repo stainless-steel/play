@@ -12,7 +12,10 @@ name = "play"
 path = "src/main.rs"
 doc = false
 
+[features]
+static = ["mpg123-sys/static", "out123-sys/static"]
+
 [dependencies]
 libc = "0.2"
-mpg123-sys = "0.2"
-out123-sys = "0.1"
+mpg123-sys = "0.3"
+out123-sys = "0.2"

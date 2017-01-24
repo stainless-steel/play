@@ -21,7 +21,8 @@ install:
     fi
 
 script:
-  - cargo build --verbose
+  - cargo build
+  - cargo build --features static
 
 notifications:
   email: false
