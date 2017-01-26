@@ -22,7 +22,9 @@ install:
 
 script:
   - cargo build
-  - cargo build --features static
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+      CFLAGS=-fPIC cargo build --features static;
+    fi
 
 notifications:
   email: false
