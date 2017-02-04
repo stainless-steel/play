@@ -13,13 +13,14 @@ extern crate out123_sys as out123;
 use libc::c_int;
 
 use std::ffi::CString;
+use std::io::{Error, ErrorKind, Result};
 use std::path::Path;
 use std::ptr;
 
-macro_rules! raise(($message:expr) => (return Err($message)));
+macro_rules! raise(($message:expr) => (return Err(Error::new(ErrorKind::Other, $message))));
 
 /// Play an audio file.
-pub fn play<T: AsRef<Path>>(path: T) -> Result<(), &'static str> {
+pub fn play<T: AsRef<Path>>(path: T) -> Result<()> {
     let path = path.as_ref();
     if !path.exists() {
         raise!("the file does not exist");
