@@ -1,6 +1,6 @@
 [package]
 name = "play"
-version = "0.2.2"
+version = "0.3.0"
 license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "The package provides a mean of playing audio files."
@@ -9,11 +9,6 @@ homepage = "https://github.com/stainless-steel/play"
 repository = "https://github.com/stainless-steel/play"
 categories = ["multimedia"]
 keywords = ["audio", "sound"]
-
-[[bin]]
-name = "play"
-path = "src/main.rs"
-doc = false
 
 [features]
 static = ["mpg123-sys/static", "out123-sys/static"]
