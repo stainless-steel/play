@@ -89,7 +89,7 @@ pub fn play<T: AsRef<Path>>(path: T) -> Result<()> {
             cleanup_and_raise!("failed to start the output");
         }
         let buffer_size = mpg123::mpg123_outblock(mpg123_handle);
-        buffer = libc::malloc(8 * buffer_size) as *mut _;
+        buffer = libc::malloc(buffer_size) as *mut _;
         loop {
             let mut written = 0;
             error = mpg123::mpg123_read(mpg123_handle, buffer, buffer_size, &mut written);
