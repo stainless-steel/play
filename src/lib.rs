@@ -33,8 +33,8 @@ pub fn play<T: AsRef<Path>>(path: T) -> Result<()> {
         _ => raise!("the path is malformed"),
     };
     unsafe {
-        let mut error = mpg123::mpg123_init();
-        if error != mpg123::MPG123_OK as c_int {
+        let mut result = mpg123::mpg123_init();
+        if result != mpg123::MPG123_OK as c_int {
             raise!("failed to initialize mpg123");
         }
         let mpg123_handle;
@@ -61,45 +61,45 @@ pub fn play<T: AsRef<Path>>(path: T) -> Result<()> {
                 raise!($message);
             });
         );
-        mpg123_handle = mpg123::mpg123_new(ptr::null(), &mut error);
-        if mpg123_handle.is_null() || error != mpg123::MPG123_OK as c_int {
+        mpg123_handle = mpg123::mpg123_new(ptr::null(), &mut result);
+        if result != mpg123::MPG123_OK as c_int || mpg123_handle.is_null() {
             cleanup_and_raise!("failed to instantiate mpg123");
         }
-        error = mpg123::mpg123_open(mpg123_handle, path.as_ptr());
-        if error != mpg123::MPG123_OK as c_int {
+        result = mpg123::mpg123_open(mpg123_handle, path.as_ptr());
+        if result != mpg123::MPG123_OK as c_int {
             cleanup_and_raise!("failed to open the input");
         }
         let mut rate = 0;
         let mut channels = 0;
         let mut encoding = 0;
-        error = mpg123::mpg123_getformat(mpg123_handle, &mut rate, &mut channels, &mut encoding);
-        if error != mpg123::MPG123_OK as c_int {
+        result = mpg123::mpg123_getformat(mpg123_handle, &mut rate, &mut channels, &mut encoding);
+        if result != mpg123::MPG123_OK as c_int {
             cleanup_and_raise!("failed to get the format");
         }
         out123_handle = out123::out123_new();
         if out123_handle.is_null() {
             cleanup_and_raise!("failed to instantiate out123");
         }
-        error = out123::out123_open(out123_handle, ptr::null(), ptr::null());
-        if error != out123::OUT123_OK as c_int {
+        result = out123::out123_open(out123_handle, ptr::null(), ptr::null());
+        if result != out123::OUT123_OK as c_int {
             cleanup_and_raise!("failed to open the output");
         }
-        error = out123::out123_start(out123_handle, rate, channels, encoding);
-        if error != out123::OUT123_OK as c_int {
+        result = out123::out123_start(out123_handle, rate, channels, encoding);
+        if result != out123::OUT123_OK as c_int {
             cleanup_and_raise!("failed to start the output");
         }
         let buffer_size = mpg123::mpg123_outblock(mpg123_handle);
         buffer = libc::malloc(buffer_size) as *mut _;
         loop {
             let mut read = 0;
-            error = mpg123::mpg123_read(mpg123_handle, buffer, buffer_size, &mut read);
-            if error != mpg123::MPG123_OK as c_int && error != mpg123::MPG123_DONE as c_int {
+            result = mpg123::mpg123_read(mpg123_handle, buffer, buffer_size, &mut read);
+            if result != mpg123::MPG123_OK as c_int && result != mpg123::MPG123_DONE as c_int {
                 cleanup_and_raise!("failed to read the input");
             }
             if out123::out123_play(out123_handle, buffer as *mut _, read) != read {
                 cleanup_and_raise!("failed to play the output");
             }
-            if error == mpg123::MPG123_DONE as c_int {
+            if result == mpg123::MPG123_DONE as c_int {
                 break;
             }
         }
