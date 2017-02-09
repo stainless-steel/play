@@ -91,14 +91,16 @@ pub fn play<T: AsRef<Path>>(path: T) -> Result<()> {
         let buffer_size = mpg123::mpg123_outblock(mpg123_handle);
         buffer = libc::malloc(buffer_size) as *mut _;
         loop {
-            let mut written = 0;
-            error = mpg123::mpg123_read(mpg123_handle, buffer, buffer_size, &mut written);
-            if written == 0 || error != mpg123::MPG123_OK as c_int {
-                break;
+            let mut read = 0;
+            error = mpg123::mpg123_read(mpg123_handle, buffer, buffer_size, &mut read);
+            if error != mpg123::MPG123_OK as c_int && error != mpg123::MPG123_DONE as c_int {
+                cleanup_and_raise!("failed to read the input");
             }
-            let played = out123::out123_play(out123_handle, buffer as *mut _, written);
-            if played != written {
+            if out123::out123_play(out123_handle, buffer as *mut _, read) != read {
                 cleanup_and_raise!("failed to play the output");
+            }
+            if error == mpg123::MPG123_DONE as c_int {
+                break;
             }
         }
         cleanup!();
