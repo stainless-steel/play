@@ -12,8 +12,11 @@ rust:
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      curl -LO ftp://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz &&
+      curl -LO http://ftpmirror.gnu.org/automake/automake-1.15.tar.gz &&
       tar -xzf automake-1.15.tar.gz && cd automake-1.15 &&
+      ./configure && make && sudo make install && cd -;
+      curl -LO http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz &&
+      tar -xzf libtool-2.4.6.tar.gz && cd libtool-2.4.6 &&
       ./configure && make && sudo make install && cd -;
       curl -LO https://pkg-config.freedesktop.org/releases/pkg-config-0.29.1.tar.gz &&
       tar -xzf pkg-config-0.29.1.tar.gz && cd pkg-config-0.29.1 &&
