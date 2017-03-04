@@ -1,6 +1,6 @@
 # Play [![Version][version-img]][version-url] [![Status][status-img]][status-url]
 
-The package provides a mean of playing audio files.
+The package provides a means of playing audio files.
 
 ## [Documentation][documentation]
 
