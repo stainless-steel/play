@@ -1,6 +1,6 @@
 [package]
 name = "play"
-version = "0.5.2"
+version = "0.5.3"
 license = "Apache-2.0/MIT"
 authors = ["Ivan Ukhov <ivan.ukhov@gmail.com>"]
 description = "The package provides a means of playing audio files."
@@ -16,5 +16,5 @@ static = ["mpg123-sys/static", "out123-sys/static"]
 
 [dependencies]
 libc = "0.2"
-mpg123-sys = "0.5"
-out123-sys = "0.4"
+mpg123-sys = "0.6"
+out123-sys = "0.5"
