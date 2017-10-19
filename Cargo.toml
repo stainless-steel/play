@@ -15,5 +15,5 @@ static = ["mpg123-sys/static", "out123-sys/static"]
 
 [dependencies]
 libc = "0.2"
-mpg123-sys = "0.4"
-out123-sys = "0.3"
+mpg123-sys = "0.5"
+out123-sys = "0.4"
